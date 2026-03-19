@@ -23,6 +23,7 @@ const openai = new OpenAI({
 export const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!);
 
 const app = express();
+app.set("trust proxy", 1); // Trust Render's secure proxy
 
 app.use(cors({
     origin: process.env.FRONTEND_URL || ['http://localhost:5173', 'http://localhost:5174', 'https://textbookkkllm.vercel.app'], // Explicitly allow the frontend origin
@@ -41,6 +42,10 @@ app.use(
         secret: "secret",
         resave: false,
         saveUninitialized: true,
+        cookie: {
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        }
     })
 )
 
