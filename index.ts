@@ -236,5 +236,10 @@ app.post("/ask", async (req: Request, res: Response) => {
     }
 });
 
+app.use((err: any, req: Request, res: Response, next: any) => {
+    console.error("Global Express Error:", err);
+    res.status(500).json({ error: String(err), stack: err.stack, message: err.message });
+});
+
 app.listen(3000);
 
