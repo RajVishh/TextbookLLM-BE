@@ -25,11 +25,10 @@ export const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPA
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'], // Explicitly allow the frontend origin
+    origin: process.env.FRONTEND_URL || ['http://localhost:5173', 'http://localhost:5174', 'https://textbookkkllm.vercel.app'], // Explicitly allow the frontend origin
     credentials: true, // Allow the client to send cookies
     optionsSuccessStatus: 200
-}
-));
+}));
 app.use(express.json());
 
 app.use("/api/mindmap", mindmapRouter);
