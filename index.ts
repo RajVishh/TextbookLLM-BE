@@ -25,9 +25,26 @@ export const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPA
 const app = express();
 app.set("trust proxy", 1); // Trust Render's secure proxy
 
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://textbookkkllm.vercel.app',
+];
+if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || ['http://localhost:5173', 'http://localhost:5174', 'https://textbookkkllm.vercel.app'], // Explicitly allow the frontend origin
-    credentials: true, // Allow the client to send cookies
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        const isAllowed = allowedOrigins.some(o => origin.startsWith(o) || o.startsWith(origin));
+        if (isAllowed || origin.includes('vercel.app') || origin.includes('localhost')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
     optionsSuccessStatus: 200
 }));
 app.use(express.json());
