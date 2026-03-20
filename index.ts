@@ -258,5 +258,7 @@ app.use((err: any, req: Request, res: Response, next: any) => {
     res.status(500).json({ error: String(err), stack: err.stack, message: err.message });
 });
 
-app.listen(3000);
-
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
