@@ -38,7 +38,7 @@ app.use(cors({
     origin: (origin, callback) => {
         if (!origin) return callback(null, true);
         const isAllowed = allowedOrigins.some(o => origin.startsWith(o) || o.startsWith(origin));
-        if (isAllowed || origin.includes('vercel.app') || origin.includes('localhost')) {
+        if (isAllowed || origin.includes('vercel.app') || origin.includes('localhost') || origin.includes('railway.app')) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
@@ -259,6 +259,6 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(Number(PORT), "0.0.0.0", () => {
     console.log(`Server is running on port ${PORT}`);
 });
