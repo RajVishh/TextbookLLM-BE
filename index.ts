@@ -80,7 +80,8 @@ app.get(
         failureRedirect: "/login",
     }),
     (req, res) => {
-        res.redirect(`${process.env.FRONTEND_URL || "http://localhost:5173"}/dashboard`)
+        const frontendUrl = (process.env.FRONTEND_URL || "http://localhost:5173").replace(/\/+$/, "");
+        res.redirect(`${frontendUrl}/dashboard`)
     }
 )
 
